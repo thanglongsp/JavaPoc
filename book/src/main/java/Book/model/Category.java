@@ -4,14 +4,12 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Book {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int book_id;
+    private int id;
 
-    private String title;
-
-    private int category;
+    private String description;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date created_at;
@@ -20,27 +18,19 @@ public class Book {
     private Date updated_at;
 
     public int getId() {
-        return book_id;
+        return id;
     }
 
     public void setId(int id) {
-        this.book_id = id;
+        this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Integer getCategory() {
-        return category;
-    }
-
-    public void setCategory(Integer category) {
-        this.category = category;
+    public void setDescription(String title) {
+        this.description = title;
     }
 
     public Date getCreated_at() {

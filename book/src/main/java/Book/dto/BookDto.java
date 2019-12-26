@@ -1,16 +1,27 @@
 package Book.dto;
 
+import lombok.Data;
+import javax.persistence.Id;
+
+@Data
 public class BookDto {
-    private int book_id;
+    @Id
+    private int id;
     private String description;
     private String title;
 
-    public int getBook_id() {
-        return book_id;
+    public BookDto(String description, int id, String title) {
+        this.id = id;
+        this.description = description;
+        this.title = title;
     }
 
-    public void setBook_id(int book_id) {
-        this.book_id = book_id;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDescription() {
