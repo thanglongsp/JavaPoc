@@ -1,16 +1,16 @@
 package Book.service;
 
+import Book.dto.BookDto;
 import Book.model.Book;
-
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Page;
 import java.util.List;
-import java.util.Optional;
 
 public interface BookService {
-    List<Book> findAll();
-    Optional<Book> findById(Integer id);
+    Page<Book> findAll(Integer page);
+    BookDto findById(Integer id);
     List<Book> findByName(String title);
     List<Book> findByCategoryId(Integer id);
-    Boolean addOrUpdateBook(Book book);
+    Boolean addOrUpdateBook(BookDto bookDto);
     Boolean deleteBook(Integer id);
+    Boolean deleteByCategory(int id);
 }

@@ -1,5 +1,8 @@
 package Book.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -13,10 +16,10 @@ public class Book {
 
     private int category;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
     private Date created_at;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
     private Date updated_at;
 
     public int getId() {

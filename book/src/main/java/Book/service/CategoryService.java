@@ -7,4 +7,5 @@ import java.util.List;
 public interface CategoryService {
     List<Category> findAll();
     List<Category> findById(Integer id);
+    Boolean deleteCategory(int id);
 }

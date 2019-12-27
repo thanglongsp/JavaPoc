@@ -1,16 +1,17 @@
 package Book.controller;
 
+import Book.dto.BookDto;
+import Book.dto.BookMapper;
 import Book.model.Book;
 import Book.repository.BookRepository;
 import Book.response.Response;
 import Book.service.BookService;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -25,11 +26,11 @@ public class RestBookController {
     @Autowired
     Response response;
 
-    @GetMapping("/")
-    public ResponseEntity<?> findAll() {
-        List<Book> listBook;
+    @GetMapping("/page={page}")
+    public ResponseEntity<?> findAll(@PathVariable("page") int page) {
+        Page<Book> listBook;
         try {
-            listBook = bookService.findAll();
+            listBook = bookService.findAll(page);
             return response.returnResponse(200, listBook);
         } catch (Exception e) {
             return response.returnResponse(500);
@@ -38,11 +39,11 @@ public class RestBookController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") int id) {
-        Optional<Book> book;
+        BookDto bookDto;
         if (repository.existsById(id)) {
             try {
-                book = bookService.findById(id);
-                return response.returnResponse(200, book);
+                bookDto = bookService.findById(id);
+                return response.returnResponse(200, bookDto);
             } catch (Exception e) {
                 return response.returnResponse(500);
             }
@@ -65,11 +66,11 @@ public class RestBookController {
     @PostMapping("/create")
     public ResponseEntity<?> createBook(@RequestParam("title") String title, @RequestParam("category") int category) {
         try {
-            Book book = new Book();
-            book.setCategory(category);
-            book.setTitle(title);
+            BookDto bookDto = new BookDto();
+            bookDto.setCategory(category);
+            bookDto.setTitle(title);
 
-            if (bookService.addOrUpdateBook(book))
+            if (bookService.addOrUpdateBook(bookDto))
                 return response.returnResponse(201);
             else throw new Exception();
         } catch (Exception e) {
@@ -79,11 +80,12 @@ public class RestBookController {
 
     @PostMapping("/update")
     public ResponseEntity<?> updateBook(@RequestParam("id") Integer id, @RequestParam("title") String title, @RequestParam("category") int category) {
+        BookMapper bookMapper = new BookMapper();
         try {
-            Book book = repository.findById(id).get();
-            if (!title.equals("")) book.setTitle(title);
-            if (category != 0) book.setCategory(category);
-            if (bookService.addOrUpdateBook(book))
+            BookDto bookDto = bookMapper.convertEntityToDto(repository.findById(id).get());
+            if (!title.equals("")) bookDto.setTitle(title);
+            if (category != 0) bookDto.setCategory(category);
+            if (bookService.addOrUpdateBook(bookDto))
                 return response.returnResponse(200);
             else throw new Exception();
         } catch (Exception e) {
@@ -95,7 +97,7 @@ public class RestBookController {
     public ResponseEntity<?> delete(@PathVariable("id") int id) {
         if (repository.existsById(id)) {
             try {
-                if(bookService.deleteBook(id))
+                if (bookService.deleteBook(id))
                     return response.returnResponse(200);
                 else throw new Exception();
             } catch (Exception e) {
